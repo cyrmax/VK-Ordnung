@@ -31,9 +31,10 @@ def cleanDeletedFriends(api):
     return
 
 def cleanOutcomingRequests(api):
-  response = api.friends.getRequests(count=1000, out=1)
+  try: response = api.friends.getRequests(count=1000, out=1)
+  except Exception as e: input(e)
   if not "items" in response or not "count" in response:
-    print("Unable to get outcoming friend requests. Exiting")
+    input("Unable to get outcoming friend requests. Exiting")
     return
   
   allRequests = response["items"]
