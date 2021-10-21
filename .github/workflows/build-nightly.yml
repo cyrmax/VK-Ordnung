@@ -1,0 +1,59 @@
+name: Build nightly
+defaults:
+  shell: bash -eo pipefail
+
+env:
+  VK_APP_ID: ${{ secrets.VK_APP_ID }}
+  VK_APP_SECRET: ${{ secrets.VK_APP_SECRET }}
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+
+jobs:
+  build-windows:
+    runs_on: windows-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare for build
+        run: |
+          rm -f vkoptions.py
+          python vkoptions-ci-writer.py
+      
+      - name: Install requirements
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Run the build
+        run: |
+          python -m nuitka --assume-yes-for-downloads --onefile VkOrdnung.py -o VkOrdnung.exe
+      
+      - name: Upload release
+        run: |
+          ls -la
+  
+  build-linux:
+    runs_on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare for build
+        run: |
+          rm -f vkoptions.py
+          python vkoptions-ci-writer.py
+      
+      - name: Install requirements
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Run the build
+        run: |
+          python -m nuitka --assume-yes-for-downloads --onefile VkOrdnung.py -o VkOrdnung.exe
+      
+      - name: Upload release
+        run: |
+          ls -la
