@@ -1,6 +1,7 @@
 name: Build nightly
 defaults:
-  shell: bash -eo pipefail
+  run:
+    shell: bash -eo pipefail
 
 env:
   VK_APP_ID: ${{ secrets.VK_APP_ID }}
@@ -15,7 +16,7 @@ on:
 
 jobs:
   build-windows:
-    runs_on: windows-latest
+    runs-on: windows-latest
     
     steps:
       - uses: actions/checkout@v2
@@ -37,7 +38,7 @@ jobs:
           ls -la
   
   build-linux:
-    runs_on: ubuntu-latest
+    runs-on: ubuntu-latest
     
     steps:
       - uses: actions/checkout@v2
