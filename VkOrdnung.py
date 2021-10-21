@@ -1,18 +1,11 @@
 from getpass import getpass
 from os import path
 import vk_api
-import requests
-from consolemenu import *
+from consolemenu import ConsoleMenu
 from consolemenu.items import *
-from vk_api.exceptions import ApiError
 from encryption import encrypt, decrypt
 from actions import FriendsCleaner
 import vkoptions
-
-http = requests.Session()
-#http.headers.update({
-  #"User-agent": "VKAndroidApp/4.13.1-1206 (Android 7.1.1; SDK 25; armeabi-v7a; ; ru)"
-#})
 
 
 class VkOrdnung:
@@ -39,7 +32,7 @@ class VkOrdnung:
         input("You have entered wrong password or something went wrong. exitting.")
         exit()
       
-      vksession = vk_api.VkApi(token=self.token, session=http)
+      vksession = vk_api.VkApi(token=self.token)
       if vksession._check_token():
         self.api = vksession.get_api()
       else:
