@@ -39,26 +39,26 @@ jobs:
           files: VkOrdnung.exe
           fail_on_unmatched_files: true
   
-  # build-linux:
-  #   runs-on: ubuntu-latest
+  build-linux:
+    runs-on: ubuntu-latest
     
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Prepare for build
-  #       run: |
-  #         rm -f vkoptions.py
-  #         python vkoptions-ci-writer.py
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare for build
+        run: |
+          rm -f vkoptions.py
+          python vkoptions-ci-writer.py
       
-  #     - name: Install requirements
-  #       run: |
-  #         pip install -r requirements.txt
+      - name: Install requirements
+        run: |
+          pip install -r requirements.txt
       
-  #     - name: Run the build
-  #       run: |
-  #         python -m nuitka --assume-yes-for-downloads --onefile VkOrdnung.py -o VkOrdnung.exe
+      - name: Run the build
+        run: |
+          python -m nuitka --assume-yes-for-downloads --onefile VkOrdnung.py -o VkOrdnung.bin
       
-  #     - name: Upload release
-  #       uses: softprops/action-gh-release@v1
-  #       with:
-  #         files: VkOrdnung.bin
-  #         fail_on_unmatched_files: true
+      - name: Upload release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: VkOrdnung.bin
+          fail_on_unmatched_files: true
