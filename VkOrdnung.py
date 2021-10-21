@@ -45,7 +45,7 @@ class VkOrdnung:
       else:
         username = input("Enter your vk login: ")
         passwd = getpass(prompt="Enter your vk password: ")
-        vksession = vk_api.VkApi(login=username, password=passwd, auth_handler=lambda: (input("enter two factor code: "), True), app_id=vkoptions.app_id, client_secret=vkoptions.app_secret, scope=vkoptions.scope, session=http)
+        vksession = vk_api.VkApi(login=username, password=passwd, auth_handler=lambda: (input("enter two factor code: "), True), app_id=vkoptions.app_id, client_secret=vkoptions.app_secret, scope=vkoptions.scope)
         try:
           vksession.auth()
         except Exception as e:
@@ -60,7 +60,7 @@ class VkOrdnung:
     else:
         username = input("Enter your vk login: ")
         passwd = getpass(prompt="Enter your vk password: ")
-        vksession = vk_api.VkApi(login=username, password=passwd, auth_handler=lambda: (input("enter two factor code: "), True), app_id=vkoptions.app_id, client_secret=vkoptions.app_secret, scope=vkoptions.scope, session=http)
+        vksession = vk_api.VkApi(login=username, password=passwd, auth_handler=lambda: (input("enter two factor code: "), True), app_id=vkoptions.app_id, client_secret=vkoptions.app_secret, scope=vkoptions.scope)
         try:
           vksession.auth()
         except Exception as e:
