@@ -3,12 +3,21 @@ from os import path
 import vk_api
 from consolemenu import ConsoleMenu
 from consolemenu.items import *
+from vk_api.vk_api import VkApi
 from encryption import encrypt, decrypt
 from actions import FriendsCleaner
-import vkoptions
+import VkAuth
+from ConfigStorage import ConfigStorage
 
 
 class VkOrdnung:
+  configStorage: ConfigStorage
+  authenticated: bool = False
+  api: vk_api.VkApi
+  
+  def __init__(self) -> None:
+    self.configStorage = ConfigStorage()
+  
   def mainMenu(self):
     if not hasattr(self, "api"): self.authenticate()
     
@@ -22,49 +31,24 @@ class VkOrdnung:
     main_menu.show()
   
   def authenticate(self):
-    if path.isfile("token"):
-      self.tokenFile = open("token", "rb")
-      encryptedToken = self.tokenFile.read()
-      self.tokenFile.close()
-      try:
-        self.token = decrypt(encryptedToken)
-      except:
-        input("You have entered wrong password or something went wrong. exitting.")
-        exit()
-      
-      vksession = vk_api.VkApi(token=self.token)
-      if vksession._check_token():
-        self.api = vksession.get_api()
+    if self.configStorage.hasToken:
+      if self.configStorage.tokenIsEncrypted:
+        token = decrypt(self.configStorage.token)
       else:
-        username = input("Enter your vk login: ")
-        passwd = getpass(prompt="Enter your vk password: ")
-        vksession = vk_api.VkApi(login=username, password=passwd, auth_handler=lambda: (input("enter two factor code: "), True), app_id=vkoptions.app_id, client_secret=vkoptions.app_secret, scope=vkoptions.scope)
-        try:
-          vksession.auth()
-        except Exception as e:
-          print(e)
-          input("authentication error"); exit()
-        self.api = vksession.get_api()
-        self.token = vksession.token["access_token"]
-        encryptedToken = encrypt(self.token)
-        self.tokenFile = open("token", "wb")
-        self.tokenFile.write(encryptedToken)
-        self.tokenFile.close()
-    else:
-        username = input("Enter your vk login: ")
-        passwd = getpass(prompt="Enter your vk password: ")
-        vksession = vk_api.VkApi(login=username, password=passwd, auth_handler=lambda: (input("enter two factor code: "), True), app_id=vkoptions.app_id, client_secret=vkoptions.app_secret, scope=vkoptions.scope)
-        try:
-          vksession.auth()
-        except Exception as e:
-          print(e)
-          input("authentication error"); exit()
-        self.api = vksession.get_api()
-        self.token = vksession.token["access_token"]
-        encryptedToken = encrypt(self.token)
-        self.tokenFile = open("token", "wb")
-        self.tokenFile.write(encryptedToken)
-        self.tokenFile.close()
+        token = self.configStorage.token
+      self.authenticated = VkAuth.checkToken(token)
+    if not self.authenticated:
+      token = VkAuth.authenticate()
+      answer = input("Authentication successful! Do you want to encrypt your authentication with a password? Y or N")
+      if answer == "y":
+        self.configStorage.tokenIsEncrypted = True
+        self.configStorage.token = encrypt(token)
+      else:
+        self.configStorage.tokenIsEncrypted = False
+        self.configStorage.token = token
+      self.api = VkAuth.makeApi(token)
+      self.authenticated = True
+      
 
 if __name__ == "__main__":
   app = VkOrdnung()
