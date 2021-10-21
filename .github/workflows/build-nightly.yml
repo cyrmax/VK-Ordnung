@@ -34,9 +34,12 @@ jobs:
           python -m nuitka --assume-yes-for-downloads --onefile VkOrdnung.py -o VkOrdnung.exe
       
       - name: Upload release
-        run: |
-          ls -la
-  
+        uses: softprops/action-gh-release@v1
+        with:
+          files: VkOrdnung.exe
+          prerelease: true
+          fail_on_unmatched_files: true
+          name: ${{ github.sha }}
   build-linux:
     runs-on: ubuntu-latest
     
@@ -56,5 +59,9 @@ jobs:
           python -m nuitka --assume-yes-for-downloads --onefile VkOrdnung.py -o VkOrdnung.exe
       
       - name: Upload release
-        run: |
-          ls -la
+        uses: softprops/action-gh-release@v1
+        with:
+          files: VkOrdnung.bin
+          prerelease: true
+          fail_on_unmatched_files: true
+          name: ${{ github.sha }}
