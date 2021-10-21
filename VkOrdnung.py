@@ -19,7 +19,7 @@ class VkOrdnung:
     self.configStorage = ConfigStorage()
   
   def mainMenu(self):
-    if not hasattr(self, "api"): self.authenticate()
+    self.authenticate()
     
     # create the main menu
     main_menu = ConsoleMenu("Vk Ortnung : main menu", "Select one of options with corresponding number and press enter.")
@@ -37,6 +37,7 @@ class VkOrdnung:
       else:
         token = self.configStorage.token
       self.authenticated = VkAuth.checkToken(token)
+      self.api = VkAuth.makeApi(token)
     if not self.authenticated:
       token = VkAuth.authenticate()
       answer = input("Authentication successful! Do you want to encrypt your authentication with a password? Y or N")

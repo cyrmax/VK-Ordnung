@@ -22,6 +22,7 @@ class ConfigStorage:
     self.config = json.loads(defaultConfigString)
   
   def saveConfig(self) -> None:
+    self.configfile.truncate(0)
     json.dump(self.config, self.configfile, indent=2, ensure_ascii=True)
   
   @property
@@ -62,3 +63,5 @@ class ConfigStorage:
       except portalocker.exceptions.LockException:
         raise PermissionError()
   
+  def __del__(self) -> None:
+    self.saveConfig()

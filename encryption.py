@@ -13,7 +13,7 @@ def kdf():
     iterations=100000,
   )
 
-def encrypt(data):
+def encrypt(data: str) -> str:
   while True:
     password = getpass(prompt="Enter password to encrypt your VK authorization token. Password: ")
     password_again = getpass(prompt="Enter password again. Password: ")
@@ -23,11 +23,11 @@ def encrypt(data):
       print("Passwords do not match. try again.")
   key = base64.urlsafe_b64encode(kdf().derive(password.encode()))
   f = Fernet(key)
-  return base64.urlsafe_b64encode(f.encrypt(data.encode()))
+  return base64.urlsafe_b64encode(f.encrypt(data.encode())).decode()
 
-def decrypt(data):
+def decrypt(data: str) -> str:
   password = getpass(prompt="Enter password to decrypt your VK authorization token. Password: ")
   key = base64.urlsafe_b64encode(kdf().derive(password.encode()))
-  decodedData = base64.urlsafe_b64decode(data)
+  decodedData = base64.urlsafe_b64decode(data.encode())
   f = Fernet(key)
   return f.decrypt(decodedData).decode()
