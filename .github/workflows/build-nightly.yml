@@ -40,6 +40,8 @@ jobs:
           prerelease: true
           fail_on_unmatched_files: true
           name: ${{ github.sha }}
+          tag_name: ${{ github.sha }}
+  
   build-linux:
     runs-on: ubuntu-latest
     
@@ -65,3 +67,4 @@ jobs:
           prerelease: true
           fail_on_unmatched_files: true
           name: ${{ github.sha }}
+          tag_name: ${{ github.sha }}
