@@ -1,7 +1,7 @@
 name: Build nightly
 defaults:
   run:
-    shell: bash -eo pipefail
+    shell: bash -eo pipefail {0}
 
 env:
   VK_APP_ID: ${{ secrets.VK_APP_ID }}
