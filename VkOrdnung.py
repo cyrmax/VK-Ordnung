@@ -17,10 +17,9 @@ class VkOrdnung:
   
   def __init__(self) -> None:
     self.configStorage = ConfigStorage()
+    self.authenticate()
   
   def mainMenu(self):
-    self.authenticate()
-    
     # create the main menu
     main_menu = ConsoleMenu("Vk Ortnung : main menu", "Select one of options with corresponding number and press enter.")
     # Friends management
