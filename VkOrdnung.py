@@ -3,7 +3,7 @@ from os import path
 import vk_api
 from consolemenu import ConsoleMenu
 from consolemenu.items import *
-from vk_api.vk_api import VkApi
+from vk_api import VkApi
 from encryption import encrypt, decrypt
 from actions import FriendsCleaner
 import VkAuth
@@ -23,11 +23,15 @@ class VkOrdnung:
     
     # create the main menu
     main_menu = ConsoleMenu("Vk Ortnung : main menu", "Select one of options with corresponding number and press enter.")
+    # Friends management
     friendsmenu = ConsoleMenu("Friends management")
     friendsmenu.append_item(FunctionItem("Clean deleted or banned friends", FriendsCleaner.cleanDeletedFriends, [self.api]))
     friendsmenu.append_item(FunctionItem("Cancel all outcoming friend requests", FriendsCleaner.cleanOutcomingRequests, [self.api]))
     friendsSubmenu = SubmenuItem("Friends management", friendsmenu, main_menu)
     main_menu.append_item(friendsSubmenu)
+    
+    # Wall management
+    
     main_menu.show()
   
   def authenticate(self):
